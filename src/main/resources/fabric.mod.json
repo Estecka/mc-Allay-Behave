@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "allay-behave",
+	"version": "${version}",
+	"name": "Allay, behave !",
+	"description": "QoL tweaks to allay behaviours.\nCall allays to your side !",
+	"authors": [
+		"Estecka"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/allay-behave",
+		"sources": "https://github.com/Estecka/mc-Allay-Behave"
+	},
+	"license": "GNU AGPLv3",
+	"icon": "assets/allay-behave/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"tk.estecka.allaybehave.AllayBehave"
+		]
+	},
+	"mixins": [
+		"allay-behave.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.19.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+	}
+}

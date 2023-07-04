@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "tk.estecka.allaybehave.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"AllayBrainMixin",
+		"AllayEntityAccessor",
+		"AllayEntityMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
