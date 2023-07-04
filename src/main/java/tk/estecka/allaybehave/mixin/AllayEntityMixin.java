@@ -37,7 +37,7 @@ extends LivingEntity
 		if (!allay.getWorld().isClient()){
 			PlayerEntity player = AllayUtil.GetBeholderOrLiked(allay);
 			
-			if (!allay.world.isClient() && AllayUtil.IsPlayerBeholding(allay, player))
+			if (!allay.getWorld().isClient() && AllayUtil.IsPlayerBeholding(allay, player))
 				AllayUtil.SetBeheld(allay, player);
 		}
 	}
