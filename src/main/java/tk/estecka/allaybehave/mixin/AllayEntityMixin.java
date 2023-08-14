@@ -1,6 +1,5 @@
 package tk.estecka.allaybehave.mixin;
 
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import tk.estecka.allaybehave.AllayUtil;
 
@@ -29,49 +29,38 @@ extends LivingEntity
 		super(type, world);
 	}
 
-	@Inject(
-		method = "tick",
-		at = @At("TAIL")
-	)
+	@Inject( method="tick", at=@At("TAIL") )
 	private void	CheckForBeholdingPlayers(CallbackInfo info) {
-		if (!allay.getWorld().isClient()){
+		if (!allay.getWorld().isClient()) {
 			PlayerEntity player = AllayUtil.GetBeholderOrLiked(allay);
-			
-			if (!allay.world.isClient() && AllayUtil.IsPlayerBeholding(allay, player))
+			if (AllayUtil.IsPlayerBeholding(allay, player))
 				AllayUtil.SetBeheld(allay, player);
 		}
 	}
 
-	@Inject(
-		method = "damage",
-		at = @At("HEAD"),
-		cancellable = true
-	)
-	private void BeholderPushAway(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info){
+	@Inject( method="damage", at=@At("HEAD"), cancellable=true )
+	private void SendOff(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info){
 		Entity attacker = source.getAttacker();
-		if (source.getAttacker() == null)
-			return;
-
-		if (!AllayUtil.IsLikedOrBeholden(allay, attacker))
+		if (source.getAttacker() == null
+		|| !AllayUtil.IsLikedOrBeholder(allay, attacker))
 			return;
 
 		boolean isBeheld = AllayUtil.IsBeheld(allay);
 		boolean isLiked = allay.getBrain().hasMemoryModule(MemoryModuleType.LIKED_PLAYER);
-		Vector3f knockbackDir = attacker.getEyePos().subtract(allay.getEyePos()).toVector3f();
 
 		if (isBeheld){
 			AllayUtil.BreakBeheld(allay);
 			SoundEvent sound = isLiked ? SoundEvents.ENTITY_ALLAY_ITEM_GIVEN : SoundEvents.ENTITY_ALLAY_ITEM_TAKEN;
 			allay.getWorld().playSoundFromEntity(null, allay, sound, SoundCategory.NEUTRAL, 2, 1);
 		}
-		allay.takeKnockback((isLiked&&isBeheld)?0.15:0.4, knockbackDir.x, knockbackDir.z);
+
+		Vec3d  knockbackDir = attacker.getEyePos().subtract(allay.getEyePos());
+		double knockbackStr = (isLiked&&isBeheld) ? 0.15 : 0.4;
+		allay.takeKnockback(knockbackStr, knockbackDir.x, knockbackDir.z);
 		info.setReturnValue(false);
 	}
 
-	@Inject(
-		method = "damage",
-		at = @At("RETURN")
-	)
+	@Inject( method="damage", at=@At("RETURN") )
 	private void BreakOffBeheld(DamageSource dmg, float amount, CallbackInfoReturnable<Boolean> info){
 		if (info.getReturnValue() || AllayUtil.IsBeheld(allay))
 			AllayUtil.BreakBeheld(allay);
@@ -80,7 +69,7 @@ extends LivingEntity
 	@Override
 	public void pushAway(Entity other){
 		if (other instanceof PlayerEntity
-		&& (allay.getWorld().isClient() || AllayUtil.IsLikedOrBeholden(allay, other)))
+		&& (allay.getWorld().isClient() || AllayUtil.IsLikedOrBeholder(allay, other)))
 			return;
 		else
 			super.pushAwayFrom(other);

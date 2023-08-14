@@ -28,7 +28,7 @@ import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import tk.estecka.allaybehave.AllayUtil;
-import tk.estecka.allaybehave.OffsetEntityLookTarget;
+import tk.estecka.allaybehave.OffsetLookTarget;
 
 @Mixin(AllayBrain.class)
 public abstract class AllayBrainMixin
@@ -53,77 +53,42 @@ public abstract class AllayBrainMixin
 		);
 	}
 
-	@Inject(
-		method = "rememberNoteBlock",
-		at = @At("HEAD"),
-		cancellable = true
-	)
+	@Inject( method="rememberNoteBlock", at=@At("HEAD"), cancellable=true )
 	static private void	refuseWhenBeheld(LivingEntity allay, BlockPos pos, CallbackInfo info){
 		if (AllayUtil.IsBeheld(allay))
 			info.cancel();
 	}
 
-	@Inject(
-		method = "getLookTarget",
-		at = @At("HEAD"),
-		cancellable = true
-	)
+	@Inject( method="getLookTarget", at=@At("HEAD"), cancellable=true )
 	static private void	getBeholder(LivingEntity allay, CallbackInfoReturnable<Optional<LookTarget>> info) {
 		Optional<LookTarget> beholder = getBeholderLookTarget(allay);
 		if (beholder.isPresent())
 			info.setReturnValue(beholder);
 	}
 
-	@Redirect(
-		method = "addIdleActivities",
-		at = @At(
-			value = "INVOKE",
-			target = "net/minecraft/entity/ai/brain/Brain.setTaskList (Lnet/minecraft/entity/ai/brain/Activity;Lcom/google/common/collect/ImmutableList;Ljava/util/Set;)V"
-		)
-	)
+	@Redirect( method="addIdleActivities", at=@At(value="INVOKE", target="net/minecraft/entity/ai/brain/Brain.setTaskList (Lnet/minecraft/entity/ai/brain/Activity;Lcom/google/common/collect/ImmutableList;Ljava/util/Set;)V") )
 	static private void AddCustomActivities(Brain<AllayEntity> brain, Activity activity, ImmutableList<? extends Pair<Integer, ? extends Task<? super AllayEntity>>> indexedTasks, Set<Pair<MemoryModuleType<?>, MemoryModuleState>> requiredMemories) 
 	{
 		var newlist = new LinkedList<Pair<Integer, ? extends Task<? super AllayEntity>>>();
-		
+
 		int i=0;
 		newlist.add(Pair.of(i++, CreatePlayerStareTask()));
 		for (var pair : indexedTasks){
 			Task<? super AllayEntity> task = pair.getSecond();
 			if (task instanceof GiveInventoryToLookTargetTask)
-				task = new GiveInventoryToLookTargetTask<>(AllayBrainMixin::GetUppedLookTarget, 2.25f, 20);
+				task = new GiveInventoryToLookTargetTask<>(AllayBrainMixin::GetOffsetLookTarget, 2.25f, 20);
 			newlist.add(Pair.of(i++, task));
 		}
 		
 		brain.setTaskList(activity, ImmutableList.copyOf(newlist), requiredMemories);
 	}
 
-	static private Optional<LookTarget> GetUppedLookTarget(LivingEntity allay){
+	static private Optional<LookTarget> GetOffsetLookTarget(LivingEntity allay){
 		Optional<LookTarget> t = getLookTarget(allay);
 		if (t.isEmpty())
 			return t;
-
-		LookTarget lt = t.get();
-		if (!(lt instanceof EntityLookTarget))
-			return t;
-
-		return Optional.of(new OffsetEntityLookTarget((EntityLookTarget)lt, 1));
+		else
+			return Optional.of(new OffsetLookTarget(t.get(), 1));
 	}
-
-	// @Redirect(
-	// 	method = "addCoreActivities",
-	// 	at = @At(
-	// 		value = "INVOKE",
-	// 		target = "net/minecraft/entity/ai/brain/Brain.setTaskList (Lnet/minecraft/entity/ai/brain/Activity;ILcom/google/common/collect/ImmutableList;)V"
-	// 	)
-	// )
-	// static private void AddCustomActivities(Brain<AllayEntity> brain, Activity activity, int begin, ImmutableList<? extends Task<? super AllayEntity>> builtin_list) 
-	// {
-	// 	var newlist = new LinkedList<Task<? super AllayEntity>>();
-
-	// 	newlist.add(CreatePlayerStareTask());
-	// 	newlist.addAll(builtin_list);
-
-	// 	brain.setTaskList(activity, begin, ImmutableList.copyOf(newlist));
-	// }
 
 }
