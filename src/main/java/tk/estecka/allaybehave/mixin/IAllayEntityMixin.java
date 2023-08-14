@@ -10,7 +10,7 @@ import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.passive.AllayEntity;
 
 @Mixin(AllayEntity.class)
-public interface AllayEntityAccessor {
+public interface IAllayEntityMixin {
 	
 	@Accessor("MEMORY_MODULES")
 	static ImmutableList<MemoryModuleType<?>>	get_MEMORY_MODULES()
