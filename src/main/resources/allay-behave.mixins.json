@@ -3,9 +3,10 @@
 	"package": "tk.estecka.allaybehave.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"AllayBrainMixin",
 		"IAllayEntityMixin",
-		"AllayEntityMixin"
+		"AllayBrainMixin",
+		"AllayEntityMixin",
+		"ServerPlayNetworkHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
