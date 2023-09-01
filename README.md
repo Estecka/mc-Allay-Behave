@@ -5,7 +5,7 @@ An allay Quality of Life mod
 ## Features
 
 ### Allay calling:
-Allays who like you can be called to your side by crouch-staring.
+Allays who like you can be called to your side, either by crouching while looking at them, or by typing their name in the chat.
 
 Called allays will follow you closely for a few second, or so long as you maintain eye contact. For that duration, you can take their item away, and they willl remain close. They will forget their liked note-block, and won't be distracted by nearby items or other note-blocks.
 
