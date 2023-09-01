@@ -9,25 +9,37 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.Box;
 import java.util.Optional;
 import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 
 public class AllayUtil 
 {
-	static public final int    BEHELD_DURATION = 5*20;
-	static public final int    STARE_DISTANCE = 32;
+	static public final int	BEHELD_DURATION = 5*20;
+	static public final int	CALL_RANGE = 32;
 
 	static private final StareInfo CALL_REQUIREMENTS = new StareInfo(){{
-		this.distance = STARE_DISTANCE;
+		this.distance = CALL_RANGE;
 		this.dotAngle = 0.02;
 		this.hasLineOfSight = true;
 	}};
 	static private final StareInfo STARE_REQUIREMENT = new StareInfo(){{
-		this.distance = STARE_DISTANCE;
+		this.distance = CALL_RANGE;
 		this.dotAngle = 0.5;
 		this.hasLineOfSight = false;
 	}};
+
+	static Box	GetSearchBox(PlayerEntity player){
+		return new Box(
+			player.getX() - CALL_RANGE,
+			player.getY() - CALL_RANGE,
+			player.getZ() - CALL_RANGE,
+			player.getX() + CALL_RANGE,
+			player.getY() + CALL_RANGE,
+			player.getZ() + CALL_RANGE
+		);
+	}
 
 	@Nullable
 	static public PlayerEntity GetLikedPlayer(LivingEntity allay){
@@ -97,5 +109,18 @@ public class AllayUtil
 		    && (isBeheld || player.isSneaking())
 		    && (StareInfo.IsStaring(player, allay, req, !isBeheld))
 		    ;
+	}
+
+	static private boolean CanNameCall(PlayerEntity player, AllayEntity allay, String calledName){
+		return AllayUtil.IsLikedOrBeholder(allay, player)
+		    && allay.hasCustomName()
+		    && allay.getCustomName().getString().equals(calledName)
+		    ;
+	}
+
+	static public void	CallNamedAllay(PlayerEntity player, String name) {
+		var allays = player.getWorld().getEntitiesByClass(AllayEntity.class, GetSearchBox(player), (allay)->CanNameCall(player, allay, name));
+		for (AllayEntity a : allays)
+			SetBeheld(a, player);
 	}
 }
