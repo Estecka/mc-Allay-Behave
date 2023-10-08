@@ -26,7 +26,7 @@ import tk.estecka.allaybehave.OffsetLookTarget;
 @Mixin(AllayBrain.class)
 public abstract class AllayBrainMixin
 {
-	static private Optional<LookTarget>	getBeholderLookTarget(LivingEntity allay){
+	static private Optional<LookTarget>	allaybehave$getBeholderLookTarget(LivingEntity allay){
 		Optional<PlayerEntity> beholder = AllayUtil.GetBeholder(allay);
 		if (beholder.isEmpty())
 			return Optional.empty();
@@ -35,14 +35,14 @@ public abstract class AllayBrainMixin
 	}
 
 	@Inject( method="rememberNoteBlock", at=@At("HEAD"), cancellable=true )
-	static private void	refuseWhenBeheld(LivingEntity allay, BlockPos pos, CallbackInfo info){
+	static private void	allaybehave$RefuseWhenBeheld(LivingEntity allay, BlockPos pos, CallbackInfo info){
 		if (AllayUtil.IsBeheld(allay))
 			info.cancel();
 	}
 
 	@Inject( method="getLookTarget", at=@At("HEAD"), cancellable=true )
-	static private void	getBeholder(LivingEntity allay, CallbackInfoReturnable<Optional<LookTarget>> info) {
-		Optional<LookTarget> beholder = getBeholderLookTarget(allay);
+	static private void	allaybehave$getBeholder(LivingEntity allay, CallbackInfoReturnable<Optional<LookTarget>> info) {
+		Optional<LookTarget> beholder = allaybehave$getBeholderLookTarget(allay);
 		if (beholder.isPresent())
 			info.setReturnValue(beholder);
 	}
@@ -51,7 +51,7 @@ public abstract class AllayBrainMixin
 	static private ImmutableList<? extends Pair<Integer, ? extends Task<? super AllayEntity>>> allaybehave$AddCustomActivities(ImmutableList<? extends Pair<Integer, ? extends Task<? super AllayEntity>>> indexedTasks) {
 		var newlist = new ArrayList<Pair<Integer, ? extends Task<? super AllayEntity>>>(indexedTasks.size() + 1);
 		var followTask = WalkTowardsLookTargetTask.create(
-			AllayBrainMixin::getBeholderLookTarget,
+			AllayBrainMixin::allaybehave$getBeholderLookTarget,
 			AllayUtil::IsBeheld,
 			4, 1, 1.65f
 		);

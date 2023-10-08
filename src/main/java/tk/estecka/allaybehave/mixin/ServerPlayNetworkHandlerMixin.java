@@ -14,7 +14,7 @@ public class ServerPlayNetworkHandlerMixin
 	private final ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler)(Object)this;
 
 	@Inject( method="handleDecoratedMessage", at=@At("HEAD"))
-	void	NameCallAllays(SignedMessage message, CallbackInfo info) {
+	void	allaybehave$NameCall(SignedMessage message, CallbackInfo info) {
 		AllayUtil.CallNamedAllay(handler.player, message.getSignedContent());
 	}
 }

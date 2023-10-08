@@ -20,43 +20,43 @@ import tk.estecka.allaybehave.AllayUtil;
 public abstract class AllayEntityMixin
 extends LivingEntityMixin
 {
-	private final AllayEntity allay = (AllayEntity)(Object)this;
+	private final AllayEntity allaybehave$this = (AllayEntity)(Object)this;
 
 	@Inject( method="tick", at=@At("TAIL") )
-	private void	CheckForBeholdingPlayers(CallbackInfo info) {
-		if (!allay.getWorld().isClient()) {
-			PlayerEntity player = AllayUtil.GetBeholderOrLiked(allay);
-			if (AllayUtil.IsPlayerBeholding(allay, player))
-				AllayUtil.SetBeheld(allay, player);
+	private void	allaybehave$CheckForBeholdingPlayers(CallbackInfo info) {
+		if (!allaybehave$this.getWorld().isClient()) {
+			PlayerEntity player = AllayUtil.GetBeholderOrLiked(allaybehave$this);
+			if (AllayUtil.IsPlayerBeholding(allaybehave$this, player))
+				AllayUtil.SetBeheld(allaybehave$this, player);
 		}
 	}
 
 	@Inject( method="damage", at=@At("HEAD"), cancellable=true )
-	private void SendOff(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info){
+	private void allaybehave$SendOff(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info){
 		Entity attacker = source.getAttacker();
 		if (source.getAttacker() == null
-		|| !AllayUtil.IsLikedOrBeholder(allay, attacker))
+		|| !AllayUtil.IsLikedOrBeholder(allaybehave$this, attacker))
 			return;
 
-		boolean isBeheld = AllayUtil.IsBeheld(allay);
-		boolean isLiked = allay.getBrain().hasMemoryModule(MemoryModuleType.LIKED_PLAYER);
+		boolean isBeheld = AllayUtil.IsBeheld(allaybehave$this);
+		boolean isLiked = allaybehave$this.getBrain().hasMemoryModule(MemoryModuleType.LIKED_PLAYER);
 
 		if (isBeheld){
-			AllayUtil.BreakBeheld(allay);
+			AllayUtil.BreakBeheld(allaybehave$this);
 			SoundEvent sound = isLiked ? SoundEvents.ENTITY_ALLAY_ITEM_GIVEN : SoundEvents.ENTITY_ALLAY_ITEM_TAKEN;
-			allay.getWorld().playSoundFromEntity(null, allay, sound, SoundCategory.NEUTRAL, 2, 1);
+			allaybehave$this.getWorld().playSoundFromEntity(null, allaybehave$this, sound, SoundCategory.NEUTRAL, 2, 1);
 		}
 
-		Vec3d  knockbackDir = attacker.getEyePos().subtract(allay.getEyePos());
+		Vec3d  knockbackDir = attacker.getEyePos().subtract(allaybehave$this.getEyePos());
 		double knockbackStr = (isLiked&&isBeheld) ? 0.15 : 0.4;
-		allay.takeKnockback(knockbackStr, knockbackDir.x, knockbackDir.z);
+		allaybehave$this.takeKnockback(knockbackStr, knockbackDir.x, knockbackDir.z);
 		info.setReturnValue(false);
 	}
 
 	@Inject( method="damage", at=@At("RETURN") )
-	private void BreakOffBeheld(DamageSource dmg, float amount, CallbackInfoReturnable<Boolean> info){
-		if (info.getReturnValue() || AllayUtil.IsBeheld(allay))
-			AllayUtil.BreakBeheld(allay);
+	private void allaybehave$BreakOffBeheld(DamageSource dmg, float amount, CallbackInfoReturnable<Boolean> info){
+		if (info.getReturnValue() || AllayUtil.IsBeheld(allaybehave$this))
+			AllayUtil.BreakBeheld(allaybehave$this);
 	}
 
 	@Override
