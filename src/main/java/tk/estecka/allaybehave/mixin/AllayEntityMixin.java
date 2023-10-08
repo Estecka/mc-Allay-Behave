@@ -6,8 +6,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.AllayEntity;
@@ -16,18 +14,13 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import tk.estecka.allaybehave.AllayUtil;
 
 @Mixin(AllayEntity.class)
 public abstract class AllayEntityMixin
-extends LivingEntity
+extends LivingEntityMixin
 {
 	private final AllayEntity allay = (AllayEntity)(Object)this;
-
-	AllayEntityMixin(EntityType<? extends AllayEntity> type, World world){
-		super(type, world);
-	}
 
 	@Inject( method="tick", at=@At("TAIL") )
 	private void	CheckForBeholdingPlayers(CallbackInfo info) {
@@ -67,12 +60,9 @@ extends LivingEntity
 	}
 
 	@Override
-	public void pushAway(Entity other){
-		if (other instanceof PlayerEntity
-		&& (allay.getWorld().isClient() || AllayUtil.IsLikedOrBeholder(allay, other)))
-			return;
-		else
-			super.pushAwayFrom(other);
+	protected void allaybehave$DontPushAway(Entity other, CallbackInfo info){
+		if (other instanceof PlayerEntity)
+			info.cancel();
 	}
 
 }
