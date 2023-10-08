@@ -26,7 +26,7 @@ public class AllayUtil
 	}};
 	static private final StareInfo STARE_REQUIREMENT = new StareInfo(){{
 		this.distance = CALL_RANGE;
-		this.dotAngle = 0.5;
+		this.dotAngle = Math.cos(Math.toRadians(90));
 		this.hasLineOfSight = false;
 	}};
 
