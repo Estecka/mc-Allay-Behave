@@ -22,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import tk.estecka.allaybehave.AllayUtil;
 import tk.estecka.allaybehave.OffsetLookTarget;
+import tk.estecka.allaybehave.tasks.TeleportTask;
 
 @Mixin(AllayBrain.class)
 public abstract class AllayBrainMixin
@@ -60,7 +61,7 @@ public abstract class AllayBrainMixin
 		newlist.add(Pair.of(i++, followTask));
 		for (var pair : indexedTasks)
 			newlist.add(Pair.of(i++, pair.getSecond()));
-
+		newlist.add(Pair.of(i++, new TeleportTask()));
 		return ImmutableList.copyOf(newlist);
 	}
 
