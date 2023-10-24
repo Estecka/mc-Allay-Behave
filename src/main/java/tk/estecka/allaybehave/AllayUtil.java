@@ -21,12 +21,12 @@ public class AllayUtil
 
 	static private final StareInfo CALL_REQUIREMENTS = new StareInfo(){{
 		this.distance = CALL_RANGE;
-		this.dotAngle = 0.02;
+		this.cosDelta = 0.02;
 		this.hasLineOfSight = true;
 	}};
 	static private final StareInfo STARE_REQUIREMENT = new StareInfo(){{
 		this.distance = CALL_RANGE;
-		this.dotAngle = Math.cos(Math.toRadians(90));
+		this.cosDelta = 1.0 - Math.cos(Math.toRadians(90/2));
 		this.hasLineOfSight = false;
 	}};
 

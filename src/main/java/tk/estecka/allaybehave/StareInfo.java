@@ -6,7 +6,10 @@ import net.minecraft.util.math.Vec3d;
 public class StareInfo 
 {
 	public double	distance;
-	public double	dotAngle;
+	/**
+	 * The cosine of the allowed angle, but remapped from [1, -1] to [0, 1].
+	 */
+	public double	cosDelta;
 	public boolean	hasLineOfSight;
 
 	static public StareInfo	IsStaring(LivingEntity beholder, LivingEntity target){
@@ -20,7 +23,7 @@ public class StareInfo
 		);
 
 		info.distance = targetDir.length();
-		info.dotAngle = stareDir.dotProduct(targetDir.normalize());
+		info.cosDelta = 1.0 - stareDir.dotProduct(targetDir.normalize());
 		info.hasLineOfSight = beholder.canSee(target);
 
 		return info;
@@ -38,13 +41,13 @@ public class StareInfo
 			return false;
 
 		Vec3d stareDir = beholder.getRotationVec(1.0f).normalize();
-		double dotAngle = 1.0 - stareDir.dotProduct(targetDir.normalize());
+		double cosDelta = 1.0 - stareDir.dotProduct(targetDir.normalize());
 
 		if (distanceScalesAngle){
-			if (dotAngle > (req.dotAngle/distance))
+			if (cosDelta > (req.cosDelta/distance))
 				return false;
 		}
-		else if (dotAngle > req.dotAngle)
+		else if (cosDelta > req.cosDelta)
 			return false;
 
 		return !req.hasLineOfSight || beholder.canSee(target);
