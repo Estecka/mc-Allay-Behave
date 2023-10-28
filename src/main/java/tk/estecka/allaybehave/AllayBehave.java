@@ -24,11 +24,11 @@ public class AllayBehave implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		AllayGamerules.Register();
+
 		var oldList = IAllayEntityMixin.get_MEMORY_MODULES();
 		var newList = new LinkedList<MemoryModuleType<?>>(oldList);
-
 		newList.add(IS_BEHELD);
-
 		IAllayEntityMixin.set_MEMORY_MODULES(ImmutableList.copyOf(newList));
 	}
 }

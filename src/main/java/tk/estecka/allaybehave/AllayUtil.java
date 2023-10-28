@@ -41,6 +41,10 @@ public class AllayUtil
 		);
 	}
 
+	static void SetStareFov(double degrees){
+		STARE_REQUIREMENT.cosDelta = 1.0 - Math.cos(Math.toRadians(degrees));
+	}
+
 	@Nullable
 	static public PlayerEntity GetLikedPlayer(LivingEntity allay){
 		Optional<UUID> optUuid = allay.getBrain().getOptionalRegisteredMemory(MemoryModuleType.LIKED_PLAYER);
