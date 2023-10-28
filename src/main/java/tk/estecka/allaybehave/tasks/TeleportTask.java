@@ -11,11 +11,12 @@ public class TeleportTask
 extends SingleTickTask<AllayEntity>
 {
 	public boolean trigger(ServerWorld world, AllayEntity allay, long time){
-		if (allay.getBrain().hasMemoryModule(MemoryModuleType.LIKED_NOTEBLOCK))
+		if (allay.getBrain().hasMemoryModule(MemoryModuleType.LIKED_NOTEBLOCK)
+		|| (allay.getBrain().hasMemoryModule(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)))
 			return false;
 
 		PlayerEntity player = AllayUtil.GetLikedPlayer(allay);
-		if (player == null)
+		if (player == null || player.getWorld() != allay.getWorld())
 			return false;
 
 		double dist = allay.getSquaredDistanceToAttackPosOf(player);

@@ -3,7 +3,7 @@
 	"id": "allay-behave",
 	"version": "${version}",
 	"name": "Allay, behave !",
-	"description": "QoL tweaks to allay behaviours.\nCall allays to your side !",
+	"description": "Allay call, and other QoL tweaks.",
 	"authors": [
 		"Estecka"
 	],
