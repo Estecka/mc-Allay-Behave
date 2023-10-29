@@ -17,10 +17,12 @@ Once you're done with them, you can send them off early using LMB.
 
 ### Teleportation
 
-This is much more limited than tameable animals' teleportation; allays will only attempt to teleport to players they are actively trying to reach. In particular, allays _will not_ teleport if:
+This is much more limited than tameable animals' teleportation; allays will only attempt to teleport to players they are actively trying to reach.
+
+In particular, allays _will not_ teleport if:
 - They are bound to a note-block.
 - They are trying to gather items.
-- They are considerably far away (>64 blocks). This point in particular will help prevent allays from teleporting across the entire world. For example, after a note-block malfunction.
+- They are considerably far away (>64 blocks). This point prevents allays from teleporting across the entire world. After a note-block malfunction for example.
 
 Allays are not able to teleport across dimensions at this time.
 
