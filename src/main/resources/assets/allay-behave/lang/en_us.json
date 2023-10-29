@@ -1,0 +1,17 @@
+{
+	"gamerule.category.allaybehave": "Allay, Behave!",
+	"gamerule.allaybehave.allayCall.bySight": "Call allays by sight",
+	"gamerule.allaybehave.allayCall.bySight.description": "Allays who like you can be called by crouching while looking at them.",
+	"gamerule.allaybehave.allayCall.byName": "Call allays by name",
+	"gamerule.allaybehave.allayCall.byName.description": "Named allays who like you can be called by typing their name in the chat",
+	"gamerule.allaybehave.allayCall.duration": "Call duration",
+	"gamerule.allaybehave.allayCall.duration.description": "How long a called allays will keep follow you, without being looked at.",
+	"gamerule.allaybehave.allayCall.range": "Call range",
+	"gamerule.allaybehave.allayCall.range.description": "How far away allays will respond to a call.",
+	"gamerule.allaybehave.allayCall.refreshFov": "Call refresh FOV",
+	"gamerule.allaybehave.allayCall.refreshFov.description": "The FOV within which called allays will keep following you.",
+	"gamerule.allaybehave.teleport.allowed": "Teleport to player",
+	"gamerule.allaybehave.teleport.allowed.description": "Allows allays to teleport to their liked player. Will only occur if the allay is actively trying to reunite with their player.",
+	"gamerule.allaybehave.teleport.distance": "Teleport distance",
+	"gamerule.allaybehave.teleport.distance.description": "The minimum distance required before an allay will teleport."
+}

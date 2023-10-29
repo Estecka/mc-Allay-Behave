@@ -16,19 +16,19 @@ import com.google.common.collect.ImmutableList;
 public class AllayBehave implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Allay, Behave!");
 
-	static public final MemoryModuleType<PlayerEntity> IS_BEHELD = Registry.register(
+	static public final MemoryModuleType<PlayerEntity> CALLING_PLAYER = Registry.register(
 		Registries.MEMORY_MODULE_TYPE,
-		new Identifier("allaybehave", "is_beheld"),
+		new Identifier("allaybehave", "calling_player"),
 		new MemoryModuleType<PlayerEntity>(Optional.empty())
 	);
 
 	@Override
 	public void onInitialize() {
+		AllayRules.Register();
+
 		var oldList = IAllayEntityMixin.get_MEMORY_MODULES();
 		var newList = new LinkedList<MemoryModuleType<?>>(oldList);
-
-		newList.add(IS_BEHELD);
-
+		newList.add(CALLING_PLAYER);
 		IAllayEntityMixin.set_MEMORY_MODULES(ImmutableList.copyOf(newList));
 	}
 }
