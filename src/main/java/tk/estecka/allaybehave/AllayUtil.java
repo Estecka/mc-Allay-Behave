@@ -10,6 +10,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.GameRules;
 import java.util.Optional;
 import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,19 @@ public class AllayUtil
 			player.getY() + range,
 			player.getZ() + range
 		);
+	}
+
+	static StareInfo	GetStareReq(boolean isInitialCall, GameRules rules){
+		var info = new StareInfo();
+
+		info.distance = rules.get(AllayRules.CALL_RANGE).get();
+		info.hasLineOfSight = isInitialCall;
+		if (!isInitialCall)
+			info.cosDelta = 1.0 - Math.cos(Math.toRadians(rules.get(AllayRules.CALL_FOV).get()/2));
+		else
+			info.cosDelta = 0.02;
+
+		return info;
 	}
 
 	static public @Nullable PlayerEntity GetLikedPlayer(LivingEntity allay){
@@ -88,19 +102,12 @@ public class AllayUtil
 		return allay.getBrain().hasMemoryModule(AllayBehave.CALLING_PLAYER);
 	}
 
-	static private final StareInfo STARE_REQ = new StareInfo();
 	static public boolean	IsPlayerStaring(AllayEntity allay, PlayerEntity player){
-		boolean isCalled = IsCalled(allay);
-		STARE_REQ.distance = allay.getWorld().getGameRules().get(AllayRules.CALL_RANGE).get();
-		STARE_REQ.hasLineOfSight = !isCalled;
-		if (isCalled)
-			STARE_REQ.cosDelta = 1.0 - Math.cos(Math.toRadians(allay.getWorld().getGameRules().get(AllayRules.CALL_FOV).get()/2));
-		else
-			STARE_REQ.cosDelta = 0.02;
-
+		boolean isInitialCall = !IsCalled(allay);
 		return (player != null)
-		    && (isCalled || player.isSneaking())
-		    && (StareInfo.IsStaring(player, allay, STARE_REQ, !isCalled))
+		    && (!player.isSpectator())
+		    && (!isInitialCall || player.isSneaking())
+		    && (StareInfo.IsStaring(player, allay, GetStareReq(isInitialCall, allay.getWorld().getGameRules()), isInitialCall))
 		    ;
 	}
 

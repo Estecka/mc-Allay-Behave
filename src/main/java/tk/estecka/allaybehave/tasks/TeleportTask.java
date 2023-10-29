@@ -5,6 +5,8 @@ import net.minecraft.entity.ai.brain.task.SingleTickTask;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import tk.estecka.allaybehave.AllayRules;
 import tk.estecka.allaybehave.AllayUtil;
 
@@ -18,7 +20,7 @@ extends SingleTickTask<AllayEntity>
 			return false;
 
 		PlayerEntity player = AllayUtil.GetLikedPlayer(allay);
-		if (player == null || player.getWorld() != allay.getWorld())
+		if (player == null || player.isSpectator() || player.getWorld() != allay.getWorld())
 			return false;
 
 		double dist = allay.getSquaredDistanceToAttackPosOf(player);
@@ -26,7 +28,13 @@ extends SingleTickTask<AllayEntity>
 		if (dist < (min*min) || (64*64) < dist)
 			return false;
 
-		allay.refreshPositionAfterTeleport(player.getPos().add(0, 0.5, 0));
+		Vec3d targetPos = player.getPos().add(0, 0.5, 0);
+		Box  targetBox = allay.getBoundingBox().offset(allay.getPos().multiply(-1).add(targetPos));
+		if (player.getWorld().containsFluid(targetBox)
+		|| (!player.getWorld().isSpaceEmpty(allay, targetBox)))
+			return false;
+
+		allay.refreshPositionAfterTeleport(targetPos);
 		return true;
 	}
 }
