@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,7 +19,7 @@ public class ServerPlayNetworkHandlerMixin
 
 	@Inject( method="handleDecoratedMessage", at=@At("HEAD"))
 	void	allaybehave$NameCall(SignedMessage message, CallbackInfo info) {
-		if (player.world.getGameRules().getBoolean(AllayRules.NAME_CALL))
+		if (((PlayerEntity)player).getWorld().getGameRules().getBoolean(AllayRules.NAME_CALL))
 			AllayUtil.CallNamedAllays(player, message.getSignedContent());
 	}
 }

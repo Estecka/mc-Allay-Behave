@@ -23,13 +23,13 @@ extends SingleTickTask<AllayEntity>
 		if (player == null || player.isSpectator() || player.getWorld() != allay.getWorld())
 			return false;
 
-		double dist = allay.getSquaredDistanceToAttackPosOf(player);
+		Vec3d targetPos = player.getEyePos();
+		double dist = allay.getPos().squaredDistanceTo(targetPos);
 		int min = allay.getWorld().getGameRules().getInt(AllayRules.TELEPORT_DIST);
 		if (dist < (min*min) || (64*64) < dist)
 			return false;
 
-		Vec3d targetPos = player.getPos().add(0, 0.5, 0);
-		Box  targetBox = allay.getBoundingBox().offset(allay.getPos().multiply(-1).add(targetPos));
+		Box   targetBox = allay.getBoundingBox().offset(allay.getPos().multiply(-1).add(targetPos));
 		if (player.getWorld().containsFluid(targetBox)
 		|| (!player.getWorld().isSpaceEmpty(allay, targetBox)))
 			return false;
