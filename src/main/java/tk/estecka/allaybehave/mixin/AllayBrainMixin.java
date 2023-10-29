@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Function;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -27,23 +28,24 @@ import tk.estecka.allaybehave.tasks.TeleportTask;
 @Mixin(AllayBrain.class)
 public abstract class AllayBrainMixin
 {
-	static private Optional<LookTarget>	allaybehave$getBeholderLookTarget(LivingEntity allay){
-		Optional<PlayerEntity> beholder = AllayUtil.GetBeholder(allay);
-		if (beholder.isEmpty())
+	@Unique
+	static private Optional<LookTarget>	getCallerLookTarget(LivingEntity allay){
+		Optional<PlayerEntity> caller = AllayUtil.GetCaller(allay);
+		if (caller.isEmpty())
 			return Optional.empty();
 		else
-			return Optional.of(new EntityLookTarget(beholder.get(), true));
+			return Optional.of(new EntityLookTarget(caller.get(), true));
 	}
 
 	@Inject( method="rememberNoteBlock", at=@At("HEAD"), cancellable=true )
-	static private void	allaybehave$RefuseWhenBeheld(LivingEntity allay, BlockPos pos, CallbackInfo info){
-		if (AllayUtil.IsBeheld(allay))
+	static private void	allaybehave$RefuseWhenCalled(LivingEntity allay, BlockPos pos, CallbackInfo info){
+		if (AllayUtil.IsCalled(allay))
 			info.cancel();
 	}
 
 	@Inject( method="getLookTarget", at=@At("HEAD"), cancellable=true )
-	static private void	allaybehave$getBeholder(LivingEntity allay, CallbackInfoReturnable<Optional<LookTarget>> info) {
-		Optional<LookTarget> beholder = allaybehave$getBeholderLookTarget(allay);
+	static private void	allaybehave$getCaller(LivingEntity allay, CallbackInfoReturnable<Optional<LookTarget>> info) {
+		Optional<LookTarget> beholder = getCallerLookTarget(allay);
 		if (beholder.isPresent())
 			info.setReturnValue(beholder);
 	}
@@ -52,8 +54,8 @@ public abstract class AllayBrainMixin
 	static private ImmutableList<? extends Pair<Integer, ? extends Task<? super AllayEntity>>> allaybehave$AddCustomActivities(ImmutableList<? extends Pair<Integer, ? extends Task<? super AllayEntity>>> indexedTasks) {
 		var newlist = new ArrayList<Pair<Integer, ? extends Task<? super AllayEntity>>>(indexedTasks.size() + 1);
 		var followTask = WalkTowardsLookTargetTask.create(
-			AllayBrainMixin::allaybehave$getBeholderLookTarget,
-			AllayUtil::IsBeheld,
+			AllayBrainMixin::getCallerLookTarget,
+			AllayUtil::IsCalled,
 			4, 1, 1.65f
 		);
 		

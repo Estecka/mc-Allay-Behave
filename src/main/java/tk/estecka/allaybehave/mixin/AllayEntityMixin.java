@@ -1,6 +1,7 @@
 package tk.estecka.allaybehave.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -14,21 +15,22 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
-import tk.estecka.allaybehave.AllayGamerules;
+import tk.estecka.allaybehave.AllayRules;
 import tk.estecka.allaybehave.AllayUtil;
 
 @Mixin(AllayEntity.class)
 public abstract class AllayEntityMixin
 extends LivingEntityMixin
 {
-	private final AllayEntity allaybehave$this = (AllayEntity)(Object)this;
+	@Unique
+	private final AllayEntity allay = (AllayEntity)(Object)this;
 
 	@Inject( method="tick", at=@At("TAIL") )
-	private void	allaybehave$CheckForBeholdingPlayers(CallbackInfo info) {
-		if (!allaybehave$this.getWorld().isClient() && allaybehave$this.getWorld().getGameRules().getBoolean(AllayGamerules.STARE_CALL)) {
-			PlayerEntity player = AllayUtil.GetBeholderOrLiked(allaybehave$this);
-			if (AllayUtil.IsPlayerBeholding(allaybehave$this, player))
-				AllayUtil.SetBeheld(allaybehave$this, player);
+	private void	allaybehave$CheckForCallingPlayers(CallbackInfo info) {
+		if (!allay.getWorld().isClient() && allay.getWorld().getGameRules().getBoolean(AllayRules.STARE_CALL)) {
+			PlayerEntity player = AllayUtil.GetCallerOrLiked(allay);
+			if (AllayUtil.IsPlayerStaring(allay, player))
+				AllayUtil.RefreshCall(allay, player);
 		}
 	}
 
@@ -36,28 +38,28 @@ extends LivingEntityMixin
 	private void allaybehave$SendOff(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info){
 		Entity attacker = source.getAttacker();
 		if (source.getAttacker() == null
-		|| !AllayUtil.IsLikedOrBeholder(allaybehave$this, attacker))
+		|| !AllayUtil.IsLikedOrCaller(allay, attacker))
 			return;
 
-		boolean isBeheld = AllayUtil.IsBeheld(allaybehave$this);
-		boolean isLiked = allaybehave$this.getBrain().hasMemoryModule(MemoryModuleType.LIKED_PLAYER);
+		boolean isCalled = AllayUtil.IsCalled(allay);
+		boolean isLiked = allay.getBrain().hasMemoryModule(MemoryModuleType.LIKED_PLAYER);
 
-		if (isBeheld){
-			AllayUtil.BreakBeheld(allaybehave$this);
+		if (isCalled){
+			AllayUtil.BreakCall(allay);
 			SoundEvent sound = isLiked ? SoundEvents.ENTITY_ALLAY_ITEM_GIVEN : SoundEvents.ENTITY_ALLAY_ITEM_TAKEN;
-			allaybehave$this.getWorld().playSoundFromEntity(null, allaybehave$this, sound, SoundCategory.NEUTRAL, 2, 1);
+			allay.getWorld().playSoundFromEntity(null, allay, sound, SoundCategory.NEUTRAL, 2, 1);
 		}
 
-		Vec3d  knockbackDir = attacker.getEyePos().subtract(allaybehave$this.getEyePos());
-		double knockbackStr = (isLiked&&isBeheld) ? 0.15 : 0.4;
-		allaybehave$this.takeKnockback(knockbackStr, knockbackDir.x, knockbackDir.z);
+		Vec3d  knockbackDir = attacker.getEyePos().subtract(allay.getEyePos());
+		double knockbackStr = (isLiked && isCalled) ? 0.15 : 0.4;
+		allay.takeKnockback(knockbackStr, knockbackDir.x, knockbackDir.z);
 		info.setReturnValue(false);
 	}
 
 	@Inject( method="damage", at=@At("RETURN") )
-	private void allaybehave$BreakOffBeheld(DamageSource dmg, float amount, CallbackInfoReturnable<Boolean> info){
-		if (info.getReturnValue() || AllayUtil.IsBeheld(allaybehave$this))
-			AllayUtil.BreakBeheld(allaybehave$this);
+	private void allaybehave$BreakOffCall(DamageSource dmg, float amount, CallbackInfoReturnable<Boolean> info){
+		if (info.getReturnValue() || AllayUtil.IsCalled(allay))
+			AllayUtil.BreakCall(allay);
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import static net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory.createBooleanR
 import static net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory.createIntRule;
 import static net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory.createDoubleRule;
 
-public class AllayGamerules
+public class AllayRules
 {
 	static public final CustomGameRuleCategory CATEGORY = new CustomGameRuleCategory(new Identifier("allaybehave", "gamerules"), Text.translatable("gamerule.category.allaybehave").formatted(Formatting.AQUA, Formatting.BOLD));
 
