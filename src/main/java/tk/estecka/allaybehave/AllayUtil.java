@@ -95,9 +95,9 @@ public class AllayUtil
 		STARE_REQ.distance = allay.getWorld().getGameRules().get(AllayGamerules.CALL_RANGE).get();
 		STARE_REQ.hasLineOfSight = !isBeheld;
 		if (isBeheld)
-			STARE_REQ.cosDelta = 0.02;
+			STARE_REQ.cosDelta = 1.0 - Math.cos(Math.toRadians(allay.getWorld().getGameRules().get(AllayGamerules.CALL_FOV).get()/2));
 		else
-		 	STARE_REQ.cosDelta = 1.0 - Math.cos(Math.toRadians(allay.getWorld().getGameRules().get(AllayGamerules.CALL_FOV).get()/2));
+			STARE_REQ.cosDelta = 0.02;
 
 		return (player != null)
 		    && (isBeheld || player.isSneaking())
