@@ -14,6 +14,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
+import tk.estecka.allaybehave.AllayGamerules;
 import tk.estecka.allaybehave.AllayUtil;
 
 @Mixin(AllayEntity.class)
@@ -24,7 +25,7 @@ extends LivingEntityMixin
 
 	@Inject( method="tick", at=@At("TAIL") )
 	private void	allaybehave$CheckForBeholdingPlayers(CallbackInfo info) {
-		if (!allaybehave$this.getWorld().isClient()) {
+		if (!allaybehave$this.getWorld().isClient() && allaybehave$this.getWorld().getGameRules().getBoolean(AllayGamerules.STARE_CALL)) {
 			PlayerEntity player = AllayUtil.GetBeholderOrLiked(allaybehave$this);
 			if (AllayUtil.IsPlayerBeholding(allaybehave$this, player))
 				AllayUtil.SetBeheld(allaybehave$this, player);

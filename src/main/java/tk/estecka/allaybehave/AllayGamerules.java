@@ -23,10 +23,10 @@ public class AllayGamerules
 	static public final Key<BooleanRule> NAME_CALL     = Register("allayCall.byName",  createBooleanRule(true));
 	static public final Key<DoubleRule>  CALL_DURATION = Register("allayCall.duration", createDoubleRule(5.0, 0.0));
 	static public final Key<IntRule>     CALL_RANGE    = Register("allayCall.range", createIntRule(32, 0));
-	static public final Key<DoubleRule>  CALL_FOV      = Register("allayCall.refreshFov", createDoubleRule(90, 0, 360, (server,rule)->AllayUtil.SetStareFov(rule.get()) ));
+	static public final Key<DoubleRule>  CALL_FOV      = Register("allayCall.refreshFov", createDoubleRule(90, 0, 360));
 
-	static public final Key<BooleanRule> TELEPORT  = Register("teleport.allowed",  createBooleanRule(true));
-	static public final Key<IntRule> TELEPORT_DIST = Register("teleport.distance", createIntRule(32, 16, 64));
+	static public final Key<BooleanRule> DO_TELEPORT   = Register("teleport.allowed",  createBooleanRule(true));
+	static public final Key<IntRule>     TELEPORT_DIST = Register("teleport.distance", createIntRule(32, 16, 64));
 
 	static public void	Register(){
 	}

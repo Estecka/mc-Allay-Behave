@@ -16,33 +16,16 @@ import org.jetbrains.annotations.Nullable;
 
 public class AllayUtil 
 {
-	static public final int	BEHELD_DURATION = 5*20;
-	static public final int	CALL_RANGE = 32;
-
-	static private final StareInfo CALL_REQUIREMENTS = new StareInfo(){{
-		this.distance = CALL_RANGE;
-		this.cosDelta = 0.02;
-		this.hasLineOfSight = true;
-	}};
-	static private final StareInfo STARE_REQUIREMENT = new StareInfo(){{
-		this.distance = CALL_RANGE;
-		this.cosDelta = 1.0 - Math.cos(Math.toRadians(90/2));
-		this.hasLineOfSight = false;
-	}};
-
 	static Box	GetSearchBox(PlayerEntity player){
+		int range = player.getWorld().getGameRules().getInt(AllayGamerules.CALL_RANGE);
 		return new Box(
-			player.getX() - CALL_RANGE,
-			player.getY() - CALL_RANGE,
-			player.getZ() - CALL_RANGE,
-			player.getX() + CALL_RANGE,
-			player.getY() + CALL_RANGE,
-			player.getZ() + CALL_RANGE
+			player.getX() - range,
+			player.getY() - range,
+			player.getZ() - range,
+			player.getX() + range,
+			player.getY() + range,
+			player.getZ() + range
 		);
-	}
-
-	static void SetStareFov(double degrees){
-		STARE_REQUIREMENT.cosDelta = 1.0 - Math.cos(Math.toRadians(degrees));
 	}
 
 	@Nullable
@@ -85,7 +68,8 @@ public class AllayUtil
 			beholder.playSound(SoundEvents.ENTITY_ALLAY_ITEM_THROWN, SoundCategory.NEUTRAL, 1.75f, pitch);
 			world.playSoundFromEntity(beholder, allay, SoundEvents.ENTITY_ALLAY_ITEM_THROWN, SoundCategory.NEUTRAL, 1, pitch);
 		}
-			
+
+		final int BEHELD_DURATION = (int)(20 * allay.getWorld().getGameRules().get(AllayGamerules.CALL_DURATION).get());
 		brain.forget(MemoryModuleType.LIKED_NOTEBLOCK);
 		brain.forget(MemoryModuleType.LOOK_TARGET);
 		brain.forget(MemoryModuleType.IS_PANICKING);
@@ -105,13 +89,19 @@ public class AllayUtil
 		return allay.getBrain().hasMemoryModule(AllayBehave.IS_BEHELD);
 	}
 
+	static private final StareInfo STARE_REQ = new StareInfo();
 	static public boolean	IsPlayerBeholding(AllayEntity allay, PlayerEntity player){
 		boolean isBeheld = IsBeheld(allay);
-		StareInfo req = isBeheld ? STARE_REQUIREMENT : CALL_REQUIREMENTS;
+		STARE_REQ.distance = allay.getWorld().getGameRules().get(AllayGamerules.CALL_RANGE).get();
+		STARE_REQ.hasLineOfSight = !isBeheld;
+		if (isBeheld)
+			STARE_REQ.cosDelta = 0.02;
+		else
+		 	STARE_REQ.cosDelta = 1.0 - Math.cos(Math.toRadians(allay.getWorld().getGameRules().get(AllayGamerules.CALL_FOV).get()/2));
 
 		return (player != null)
 		    && (isBeheld || player.isSneaking())
-		    && (StareInfo.IsStaring(player, allay, req, !isBeheld))
+		    && (StareInfo.IsStaring(player, allay, STARE_REQ, !isBeheld))
 		    ;
 	}
 
