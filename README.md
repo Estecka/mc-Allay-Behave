@@ -1,17 +1,28 @@
 # Allay, behave !
 
-An allay Quality of Life mod
+An allay Quality of Life mod.
+
+Some features can be fine-tuned in the gamerules.
 
 ## Features
 
 ### Allay calling:
 Allays who like you can be called to your side, either by crouching while looking at them, or by typing their name in the chat.
 
-Called allays will follow you closely for a few second, or so long as you maintain eye contact. For that duration, they will remain close even if you take their item away. They will forget their liked note-block, and won't be distracted by nearby.
+Called allays will follow you closely for a few second, or so long as you maintain eye contact. For that duration, they will remain close even if you take their item away. They will forget their liked note-block, and won't be distracted by nearby items or note-blocks.
 
-Calling an allay by sight requires precisely positioning the crosshair on the allay, but maintaining eye contact afterward is much more forgiving. You'll only need to look into their general direction, so you can easily keep multiple allays at your heel..
+Calling an allay by sight requires precisely positioning the crosshair on the allay, but maintaining eye contact afterward is easier. You'll only need to look into their general direction, so you can easily keep multiple allays at your heels.
 
 Once you're done with them, you can send them off early using LMB.
+
+### Teleportation
+
+This is much more limited than tameable animals' teleportation; allays will only attempt to teleport to players they are actively trying to reach. In particular, allays _will not_ teleport if:
+- They are bound to a note-block.
+- They are trying to gather items.
+- They are considerably far away (>64 blocks). This point in particular will help prevent allays from teleporting across the entire world. For example, after a note-block malfunction.
+
+Allays are not able to teleport across dimensions at this time.
 
 ### Other tweaks:
 - **Allays can be pushed around by their liked player using LMB.** This helps removing them from places where you're trying to build.

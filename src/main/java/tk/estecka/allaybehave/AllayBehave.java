@@ -18,7 +18,7 @@ public class AllayBehave implements ModInitializer {
 
 	static public final MemoryModuleType<PlayerEntity> CALLING_PLAYER = Registry.register(
 		Registries.MEMORY_MODULE_TYPE,
-		new Identifier("allaybehave", "is_called"),
+		new Identifier("allaybehave", "calling_player"),
 		new MemoryModuleType<PlayerEntity>(Optional.empty())
 	);
 

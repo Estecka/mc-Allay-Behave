@@ -11,3 +11,5 @@
 
 ## v1.3
 - Mixin refactor to improve compatibility.
+- Gave allays the ability to teleport to their player
+- Added several gamerules
