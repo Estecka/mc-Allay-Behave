@@ -30,3 +30,6 @@ Allays are not able to teleport across dimensions at this time.
 - **Allays can be pushed around by their liked player using LMB.** This helps removing them from places where you're trying to build.
 - (_Requires clientside_) **Allays can no longer push other players around when colliding.** This prevents them from pushing you off the edge of a block, or offsetting your croshair right as you're about to interact with something.
 - **Allays will aim a little higher when giving items to a player.** This prevents them from trying to give you items through the floor.
+
+## Environment
+Almost all functionalities are **fully server-side.** Only player collisions are handled client-side.

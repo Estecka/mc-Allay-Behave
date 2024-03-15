@@ -14,7 +14,8 @@ public class TeleportTask
 extends SingleTickTask<AllayEntity>
 {
 	public boolean trigger(ServerWorld world, AllayEntity allay, long time){
-		if (!allay.getWorld().getGameRules().getBoolean(AllayRules.DO_TELEPORT)
+		if (allay.isLeashed()
+		|| (!allay.getWorld().getGameRules().getBoolean(AllayRules.DO_TELEPORT))
 		|| (allay.getBrain().hasMemoryModule(MemoryModuleType.LIKED_NOTEBLOCK))
 		|| (allay.getBrain().hasMemoryModule(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)))
 			return false;

@@ -10,6 +10,9 @@
 - Allays can now be called by typing their name in the chat.
 
 ## v1.3
+### v1.3.0
 - Mixin refactor to improve compatibility.
 - Gave allays the ability to teleport to their player
 - Added several gamerules
+### v1.3.1
+- Allays can no longer teleport when leashed
