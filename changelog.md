@@ -16,3 +16,5 @@
 - Added several gamerules
 ### v1.3.1
 - Allays can no longer teleport when leashed
+### v1.3.2
+- Updated for MC 1.21

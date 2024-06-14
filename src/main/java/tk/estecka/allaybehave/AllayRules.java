@@ -17,7 +17,7 @@ import static net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory.createDoubleRu
 
 public class AllayRules
 {
-	static public final CustomGameRuleCategory CATEGORY = new CustomGameRuleCategory(new Identifier("allaybehave", "gamerules"), Text.translatable("gamerule.category.allaybehave").formatted(Formatting.AQUA, Formatting.BOLD));
+	static public final CustomGameRuleCategory CATEGORY = new CustomGameRuleCategory(Identifier.of("allaybehave", "gamerules"), Text.translatable("gamerule.category.allaybehave").formatted(Formatting.AQUA, Formatting.BOLD));
 
 	static public final Key<BooleanRule> STARE_CALL    = Register("allayCall.bySight", createBooleanRule(true));
 	static public final Key<BooleanRule> NAME_CALL     = Register("allayCall.byName",  createBooleanRule(true));
