@@ -77,7 +77,7 @@ public class AllayUtil
 			var world = allay.getWorld();
 			float pitch = Util.getRandom(AllayEntity.THROW_SOUND_PITCHES, world.getRandom());
 
-			caller.playSound(SoundEvents.ENTITY_ALLAY_ITEM_THROWN, SoundCategory.NEUTRAL, 1.75f, pitch);
+			caller.playSoundToPlayer(SoundEvents.ENTITY_ALLAY_ITEM_THROWN, SoundCategory.NEUTRAL, 1.75f, pitch);
 			world.playSoundFromEntity(caller, allay, SoundEvents.ENTITY_ALLAY_ITEM_THROWN, SoundCategory.NEUTRAL, 1, pitch);
 		}
 
