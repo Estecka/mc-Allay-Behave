@@ -9,9 +9,10 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/allay-behave",
-		"sources": "https://github.com/Estecka/mc-Allay-Behave"
+		"sources": "https://github.com/Estecka/mc-Allay-Behave",
+		"issues":  "https://github.com/Estecka/mc-Allay-Behave/issues"
 	},
-	"license": "GNU AGPLv3",
+	"license": "EUPL",
 	"icon": "assets/allay-behave/icon.png",
 	"environment": "*",
 	"entrypoints": {

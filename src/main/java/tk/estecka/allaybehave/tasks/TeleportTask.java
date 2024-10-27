@@ -15,7 +15,7 @@ extends SingleTickTask<AllayEntity>
 {
 	public boolean trigger(ServerWorld world, AllayEntity allay, long time){
 		if (allay.isLeashed()
-		|| (!allay.getWorld().getGameRules().getBoolean(AllayRules.DO_TELEPORT))
+		|| (!allay.getServer().getGameRules().getBoolean(AllayRules.DO_TELEPORT))
 		|| (allay.getBrain().hasMemoryModule(MemoryModuleType.LIKED_NOTEBLOCK))
 		|| (allay.getBrain().hasMemoryModule(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)))
 			return false;
@@ -26,7 +26,7 @@ extends SingleTickTask<AllayEntity>
 
 		Vec3d targetPos = player.getEyePos();
 		double dist = allay.getPos().squaredDistanceTo(targetPos);
-		int min = allay.getWorld().getGameRules().getInt(AllayRules.TELEPORT_DIST);
+		int min = allay.getServer().getGameRules().getInt(AllayRules.TELEPORT_DIST);
 		if (dist < (min*min) || (64*64) < dist)
 			return false;
 

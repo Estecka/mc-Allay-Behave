@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class AllayUtil 
 {
 	static Box	GetSearchBox(PlayerEntity player){
-		int range = player.getWorld().getGameRules().getInt(AllayRules.CALL_RANGE);
+		int range = player.getServer().getGameRules().getInt(AllayRules.CALL_RANGE);
 		return new Box(
 			player.getX() - range,
 			player.getY() - range,
@@ -81,7 +81,7 @@ public class AllayUtil
 			world.playSoundFromEntity(caller, allay, SoundEvents.ENTITY_ALLAY_ITEM_THROWN, SoundCategory.NEUTRAL, 1, pitch);
 		}
 
-		int callDuration = (int)(20 * allay.getWorld().getGameRules().get(AllayRules.CALL_DURATION).get());
+		int callDuration = (int)(20 * allay.getServer().getGameRules().get(AllayRules.CALL_DURATION).get());
 		brain.forget(MemoryModuleType.LIKED_NOTEBLOCK);
 		brain.forget(MemoryModuleType.LOOK_TARGET);
 		brain.forget(MemoryModuleType.IS_PANICKING);
@@ -107,7 +107,7 @@ public class AllayUtil
 		return (player != null)
 		    && (!player.isSpectator())
 		    && (!isInitialCall || player.isSneaking())
-		    && (StareInfo.IsStaring(player, allay, GetStareReq(isInitialCall, allay.getWorld().getGameRules()), isInitialCall))
+		    && (StareInfo.IsStaring(player, allay, GetStareReq(isInitialCall, allay.getServer().getGameRules()), isInitialCall))
 		    ;
 	}
 

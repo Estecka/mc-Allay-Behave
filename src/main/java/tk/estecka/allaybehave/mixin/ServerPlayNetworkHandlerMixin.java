@@ -19,7 +19,7 @@ public class ServerPlayNetworkHandlerMixin
 
 	@Inject( method="handleDecoratedMessage", at=@At("HEAD"))
 	void	allaybehave$NameCall(SignedMessage message, CallbackInfo info) {
-		if (((PlayerEntity)player).getWorld().getGameRules().getBoolean(AllayRules.NAME_CALL))
+		if (((PlayerEntity)player).getServer().getGameRules().getBoolean(AllayRules.NAME_CALL))
 			AllayUtil.CallNamedAllays(player, message.getSignedContent());
 	}
 }

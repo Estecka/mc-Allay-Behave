@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.damage.DamageSource;
@@ -19,23 +20,31 @@ import tk.estecka.allaybehave.AllayRules;
 import tk.estecka.allaybehave.AllayUtil;
 
 @Mixin(AllayEntity.class)
-public abstract class AllayEntityMixin
+public class AllayEntityMixin
 extends LivingEntityMixin
 {
 	@Unique
 	private final AllayEntity allay = (AllayEntity)(Object)this;
 
 	@Inject( method="tick", at=@At("TAIL") )
-	private void	allaybehave$CheckForCallingPlayers(CallbackInfo info) {
-		if (!allay.getWorld().isClient() && allay.getWorld().getGameRules().getBoolean(AllayRules.STARE_CALL)) {
+	private void	CheckForCallingPlayers(CallbackInfo info) {
+		if (!allay.getWorld().isClient() && allay.getServer().getGameRules().getBoolean(AllayRules.STARE_CALL)) {
 			PlayerEntity player = AllayUtil.GetCallerOrLiked(allay);
 			if (AllayUtil.IsPlayerStaring(allay, player))
 				AllayUtil.RefreshCall(allay, player);
 		}
 	}
 
-	@Inject( method="damage", at=@At("HEAD"), cancellable=true )
-	private void allaybehave$SendOff(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info){
+	@Inject(
+		method={
+			/**1.21.0*/ "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z",
+			/**1.21.2*/ "method_64397(Lnet/minecraft/class_3218;Lnet/minecraft/class_1282;F)Z"
+		},
+		require=1,
+		at=@At("HEAD"),
+		cancellable=true
+	)
+	private void SendOff(CallbackInfoReturnable<Boolean> info, @Local(argsOnly=true) DamageSource source){
 		Entity attacker = source.getAttacker();
 		if (source.getAttacker() == null
 		|| !AllayUtil.IsLikedOrCaller(allay, attacker))
@@ -56,8 +65,15 @@ extends LivingEntityMixin
 		info.setReturnValue(false);
 	}
 
-	@Inject( method="damage", at=@At("RETURN") )
-	private void allaybehave$BreakOffCall(DamageSource dmg, float amount, CallbackInfoReturnable<Boolean> info){
+	@Inject( 
+		method={
+			/**1.21.0*/ "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z",
+			/**1.21.2*/ "method_64397(Lnet/minecraft/class_3218;Lnet/minecraft/class_1282;F)Z"
+		},
+		require=1,
+		at=@At("RETURN")
+	)
+	private void BreakOffCall(CallbackInfoReturnable<Boolean> info){
 		if (info.getReturnValue() || AllayUtil.IsCalled(allay))
 			AllayUtil.BreakCall(allay);
 	}
