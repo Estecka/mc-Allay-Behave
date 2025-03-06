@@ -20,3 +20,6 @@
 - Updated for MC 1.21
 ### v1.3.3
 - Updated for MC 1.21.2
+
+## v1.4
+- Taking an item from an allay will automatically call it.

@@ -13,6 +13,8 @@ Called allays will follow you closely for a few second, or so long as you mainta
 
 Calling an allay by sight requires precisely positioning the crosshair on the allay, but maintaining eye contact afterward is easier. You'll only need to look into their general direction, so you can easily keep multiple allays at your heels.
 
+Taking an item from an allay will automatically call them.
+
 Once you're done with them, you can send them off early using LMB.
 
 ### Teleportation

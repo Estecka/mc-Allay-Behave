@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import tk.estecka.allaybehave.AllayRules;
 import tk.estecka.allaybehave.AllayUtil;
@@ -33,6 +34,15 @@ extends LivingEntityMixin
 			if (AllayUtil.IsPlayerStaring(allay, player))
 				AllayUtil.RefreshCall(allay, player);
 		}
+	}
+
+	@Inject(
+		method = "interactMob",
+		at = @At(value="INVOKE", target="net/minecraft/entity/player/PlayerEntity.giveItemStack(Lnet/minecraft/item/ItemStack;)Z")
+	)
+	private void callOnItemGrab(PlayerEntity player, Hand hand, CallbackInfoReturnable<?> ci){
+		if (!player.getWorld().isClient())
+			AllayUtil.RefreshCall(this.allay, player);
 	}
 
 	@Inject(

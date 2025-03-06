@@ -12,7 +12,7 @@
 		"sources": "https://github.com/Estecka/mc-Allay-Behave",
 		"issues":  "https://github.com/Estecka/mc-Allay-Behave/issues"
 	},
-	"license": "EUPL",
+	"license": "EUPL-1.2",
 	"icon": "assets/allay-behave/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -25,7 +25,7 @@
 	],
 	"depends": {
 		"minecraft": "^1.21",
-		"fabricloader": ">=0.15.11",
+		"fabricloader": ">=0.16.10",
 		"fabric-api": "*",
 		"java": ">=21"
 	}
