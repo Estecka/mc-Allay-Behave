@@ -14,3 +14,6 @@ Initial Release
 ### Worked around:
 - `World.getGamerules()` was moved to `ServerWorld`; use `Entity.getServer().getGameRules()` instead.
 - `Entity.damage()` takes an extra parameter in first position: provide multiple `methods` to `@inject`, and get arguments with `@Local`
+
+## 1.21.5
+- `World::playSoundFromEntity` now takes an `Entity` instead of a `PlayerEntity`. No code change required, but needs recompilation.

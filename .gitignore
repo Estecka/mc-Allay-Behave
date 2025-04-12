@@ -21,8 +21,8 @@ classes/
 .settings/
 .vscode/
 bin/
-.factorypath
 .classpath
+.factorypath
 .project
 
 # macos
@@ -39,3 +39,5 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+
+*.bak
