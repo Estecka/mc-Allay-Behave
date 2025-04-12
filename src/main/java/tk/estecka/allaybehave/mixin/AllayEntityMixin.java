@@ -68,6 +68,8 @@ extends LivingEntityMixin
 			SoundEvent sound = isLiked ? SoundEvents.ENTITY_ALLAY_ITEM_GIVEN : SoundEvents.ENTITY_ALLAY_ITEM_TAKEN;
 			allay.getWorld().playSoundFromEntity(null, allay, sound, SoundCategory.NEUTRAL, 2, 1);
 		}
+		else
+			allay.getBrain().remember(MemoryModuleType.IS_PANICKING, true);
 
 		Vec3d  knockbackDir = attacker.getEyePos().subtract(allay.getEyePos());
 		double knockbackStr = (isLiked && isCalled) ? 0.15 : 0.4;
@@ -75,7 +77,7 @@ extends LivingEntityMixin
 		info.setReturnValue(false);
 	}
 
-	@Inject( 
+	@Inject(
 		method={
 			/**1.21.0*/ "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z",
 			/**1.21.2*/ "method_64397(Lnet/minecraft/class_3218;Lnet/minecraft/class_1282;F)Z"
